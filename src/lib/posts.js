@@ -1,0 +1,77 @@
+// 文章数据存储
+export const posts = [
+  {
+    id: 1,
+    slug: 'hello-world',
+    title: '欢迎来到我的博客',
+    content: '这是我的第一篇博客文章。在这里我将分享我的技术学习心得和生活感悟。',
+    excerpt: '这是我的第一篇博客文章...',
+    date: '2024-01-15',
+    author: 'chenweixi',
+    tags: ['博客', '开始']
+  },
+  {
+    id: 2,
+    slug: 'react-hooks-guide',
+    title: 'React Hooks 完全指南',
+    content: 'React Hooks 是 React 16.8 引入的新特性，它让我们可以在函数组件中使用状态和其他 React 特性。本文将详细介绍各种 Hooks 的使用方法。',
+    excerpt: 'React Hooks 是 React 16.8 引入的新特性...',
+    date: '2024-01-20',
+    author: 'chenweixi',
+    tags: ['React', 'JavaScript', '前端']
+  },
+  {
+    id: 3,
+    slug: 'nextjs-best-practices',
+    title: 'Next.js 最佳实践',
+    content: 'Next.js 是一个强大的 React 框架，提供了许多开箱即用的功能。本文将分享一些 Next.js 开发中的最佳实践。',
+    excerpt: 'Next.js 是一个强大的 React 框架...',
+    date: '2024-01-25',
+    author: 'chenweixi',
+    tags: ['Next.js', 'React', 'SSR']
+  },
+  {
+    id: 4,
+    slug: 'typescript-tips',
+    title: 'TypeScript 实用技巧',
+    content: 'TypeScript 为 JavaScript 添加了静态类型检查，大大提高了代码的可维护性。本文分享一些实用的 TypeScript 技巧。',
+    excerpt: 'TypeScript 为 JavaScript 添加了静态类型检查...',
+    date: '2024-02-01',
+    author: 'chenweixi',
+    tags: ['TypeScript', 'JavaScript']
+  }
+];
+
+// 获取所有文章
+export function getAllPosts() {
+  return posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+// 根据 slug 获取单篇文章
+export function getPostBySlug(slug) {
+  return posts.find(post => post.slug === slug);
+}
+
+// 根据 ID 获取单篇文章
+export function getPostById(id) {
+  return posts.find(post => post.id === id);
+}
+
+// 获取文章摘要列表（不包含完整内容）
+export function getPostsSummary() {
+  return posts.map(({ content, ...post }) => post).sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+// 根据标签筛选文章
+export function getPostsByTag(tag) {
+  return posts.filter(post => post.tags.includes(tag)).sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+// 获取所有标签
+export function getAllTags() {
+  const tags = new Set();
+  posts.forEach(post => {
+    post.tags.forEach(tag => tags.add(tag));
+  });
+  return Array.from(tags);
+}
