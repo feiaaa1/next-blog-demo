@@ -1,5 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
+import fs from "fs";
+import path from "path";
 
 // 定义博客文章类型
 interface Post {
@@ -8,39 +10,30 @@ interface Post {
 	title: string;
 	excerpt: string;
 	date: string;
-	readTime: string;
+	author: string;
+	tags: string[];
 }
 
-// 模拟博客数据
-const posts: Post[] = [
-	{
-		id: 1,
-		slug: "first-post",
-		title: "我的第一篇博客文章",
-		excerpt:
-			"这是我的第一篇博客文章，介绍如何使用 Next.js 构建现代化的 Web 应用。",
-		date: "2024-01-15",
-		readTime: "5分钟阅读",
-	},
-	{
-		id: 2,
-		slug: "react-best-practices",
-		title: "React 开发最佳实践",
-		excerpt: "分享一些在 React 开发中应该遵循的最佳实践和常见陷阱。",
-		date: "2024-01-10",
-		readTime: "8分钟阅读",
-	},
-	{
-		id: 3,
-		slug: "tailwind-css-guide",
-		title: "Tailwind CSS 使用指南",
-		excerpt: "详细介绍如何使用 Tailwind CSS 快速构建美观的用户界面。",
-		date: "2024-01-05",
-		readTime: "6分钟阅读",
-	},
-];
+interface PostsProps {
+	posts: Post[];
+}
 
-export default function Posts() {
+export async function getStaticProps() {
+	const filePath = path.join(process.cwd(), "public", "posts.json");
+	const fileContent = fs.readFileSync(filePath, "utf8");
+	const posts: Post[] = JSON.parse(fileContent);
+
+	// 按日期排序
+	const sortedPosts = posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+	return {
+		props: {
+			posts: sortedPosts,
+		},
+	};
+}
+
+export default function Posts({ posts }: PostsProps) {
 	return (
 		<>
 			<Head>
@@ -74,7 +67,15 @@ export default function Posts() {
 											<div className="flex items-center space-x-4 text-sm text-gray-500">
 												<span>{post.date}</span>
 												<span>•</span>
-												<span>{post.readTime}</span>
+												<span>{post.author}</span>
+												<span>•</span>
+												<div className="flex space-x-1">
+													{post.tags.map((tag) => (
+														<span key={tag} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+															{tag}
+														</span>
+													))}
+												</div>
 											</div>
 										</div>
 										<div className="mt-4 md:mt-0 md:ml-4">

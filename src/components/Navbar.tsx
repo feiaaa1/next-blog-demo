@@ -18,6 +18,9 @@ export default function Navbar() {
 						<Link href="/posts" className="hover:text-blue-200">
 							博客
 						</Link>
+						<Link href="/admin" className="hover:text-blue-200">
+							管理
+						</Link>
 					</div>
 				</div>
 			</div>
